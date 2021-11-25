@@ -1,16 +1,19 @@
 import unittest
+import sys
+
+sys.path.insert(0, '../src')
 from unidadeBiblioteca import UnidadeBiblioteca
 
 class TestUnidadeBiblioteca(unittest.TestCase):
 
     def setUp(self):
         #TODO
-        print('TODO')
+        pass
 
     def tearDown(self):
         #TODO
-        print('TODO')
+        pass
 
     def testUnidadeBiblioteca(self):
         #TODO
-        print('TODO')
+        pass
