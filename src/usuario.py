@@ -3,27 +3,46 @@ TAM_MAX_NOME = 50
 class Usuario:
 
     def __init__(self, CPF, nome, email):
-        # CPF só pode conter dígitos de 0 a 9
-        if(not CPF.isdecimal()):
-            raise Exception('CPF contém símbolos inválidos')
-        # Tamanho do CPF deve ser de exatamente 11 dígitos
-        if(len(str(CPF)) != 11):
-            raise Exception('Tamanho do CPF inválido, não tem 11 dígitos')
 
-        # Nome só pode conter letras e espaços
-        if(not nome.replace(' ', '').isalpha()):
-            raise Exception('Nome contém símbolos inválidos')
-        # Tamanho do nome deve ser menor ou igual a TAM_MAX_NOME
-        if(len(str(nome)) > TAM_MAX_NOME):
-            raise Exception('Tamanho do nome inválido, deve ter até', TAM_MAX_NOME, 'caracteres')
-
-        # Email deve conter @
-        if(not '@' in email):
-            raise Exception('Email inválido')
+        self.checaValidadeParametrosUsuario(CPF, nome, email)
 
         self.CPF = CPF
         self.nome = nome
         self.email = email
+
+    def checaValidadeParametrosUsuario(self, CPF, nome, email):
+        if(not self.checaValidadeCPF(CPF)):
+            raise Exception('CPF inválido: deve ter exatamente 11 dígitos de 0 a 9')
+
+        if(not self.checaValidadeNome(nome)):
+            raise Exception('Nome inválido: deve ter tamanho máximo '+ str(TAM_MAX_NOME) +' e conter apenas letras e espaços')
+
+        if(not self.checaValidadeEmail(email)):
+            raise Exception('Email inválido: deve conter @')
+
+    def checaValidadeCPF(self, CPF):
+        # CPF só pode conter dígitos de 0 a 9
+        if(not CPF.isdecimal()):
+            return False
+        # Tamanho do CPF deve ser de exatamente 11 dígitos
+        if(len(str(CPF)) != 11):
+            return False
+        return True
+
+    def checaValidadeNome(self, nome):
+        # Nome só pode conter letras e espaços
+        if(not nome.replace(' ', '').isalpha()):
+            return False
+        # Tamanho do nome deve ser menor ou igual a TAM_MAX_NOME
+        if(len(str(nome)) > TAM_MAX_NOME):
+            return False
+        return True
+
+    def checaValidadeEmail(self, email):
+        # Email deve conter @
+        if(not '@' in email):
+            return False
+        return True
 
     def getCPF(self):
         return self.CPF
@@ -35,19 +54,12 @@ class Usuario:
         return self.email
 
     def setNome(self, nomeNovo):
-        # Nome só pode conter letras e espaços
-        if(not nomeNovo.replace(' ', '').isalpha()):
-            return
-        # Tamanho do nome deve ser menor ou igual a TAM_MAX_NOME
-        if(len(str(nomeNovo)) > TAM_MAX_NOME):
-            return
-        self.nome = nomeNovo
+        if(self.checaValidadeNome(nomeNovo)):
+            self.nome = nomeNovo
 
     def setEmail(self, emailNovo):
-        # Email deve conter @
-        if(not '@' in emailNovo):
-            return
-        self.email = emailNovo
+        if(self.checaValidadeEmail(emailNovo)):
+            self.email = emailNovo      
 
 
     def alugarLivroUnidade(self, ISBN, unidadeID):

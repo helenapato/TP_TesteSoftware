@@ -16,7 +16,7 @@ class TestUsuario(unittest.TestCase):
         #TODO
         pass
 
-    def testInitCPF_Valido(self):
+    def testInitUsuarioValido(self):
         try:
             usuario = Usuario('01234567890', 'joao', 'joao@exemplo.com')
         except:
