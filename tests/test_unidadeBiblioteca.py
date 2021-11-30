@@ -3,13 +3,17 @@ import sys
 
 sys.path.insert(0, '../src')
 from unidadeBiblioteca import UnidadeBiblioteca
+from livroBiblioteca import LivroBiblioteca
 
 class TestUnidadeBiblioteca(unittest.TestCase):
 
     def setUp(self):
-        livros = {1 : [3, 4],
-                  2 : [0, 5],
-                  3 : [6, 0]}
+        livro1 = LivroBiblioteca(1, 3, 4)
+        livro2 = LivroBiblioteca(2, 0, 5, ['12345678900'])
+        livro3 = LivroBiblioteca(3, 6, 0)
+        livros = {1 : livro1,
+                  2 : livro2,
+                  3 : livro3}
         self.unidadeBiblioteca = UnidadeBiblioteca('123', 'Rua A, 1', livros)
 
 
@@ -19,11 +23,8 @@ class TestUnidadeBiblioteca(unittest.TestCase):
     def testGetEndereco(self):
         self.assertEqual('Rua A, 1', self.unidadeBiblioteca.getEndereco())
     
-    def testGetLivros(self):
-        livros = {1 : [3, 4],
-                  2 : [0, 5],
-                  3 : [6, 0]}        
-        self.assertEqual(livros, self.unidadeBiblioteca.getLivros())
+    def testGetLivros(self):    
+        self.assertEqual(self.unidadeBiblioteca.livros, self.unidadeBiblioteca.getLivros())
 
     def testGetCopiasDisponiveisLivroExiste(self):
         self.assertEqual(3, self.unidadeBiblioteca.getCopiasDisponiveisLivro(1))
@@ -32,15 +33,15 @@ class TestUnidadeBiblioteca(unittest.TestCase):
     def testGetCopiasDisponiveisLivroNaoExiste(self):
         self.assertEqual(0, self.unidadeBiblioteca.getCopiasDisponiveisLivro(4))
 
-    def testGetCopiasAlugadasLivroExiste(self):
-        self.assertEqual(5, self.unidadeBiblioteca.getCopiasAlugadasLivro(2))
-        self.assertEqual(0, self.unidadeBiblioteca.getCopiasAlugadasLivro(3))
+    def testGetCopiasEmprestadasLivroExiste(self):
+        self.assertEqual(5, self.unidadeBiblioteca.getCopiasEmprestadasLivro(2))
+        self.assertEqual(0, self.unidadeBiblioteca.getCopiasEmprestadasLivro(3))
 
-    def testGetCopiasAlugadasLivroNaoExiste(self):
-        self.assertEqual(-1, self.unidadeBiblioteca.getCopiasAlugadasLivro(4))
+    def testGetCopiasEmprestadasLivroNaoExiste(self):
+        self.assertEqual(-1, self.unidadeBiblioteca.getCopiasEmprestadasLivro(4))
 
     def testSetLivros(self):
-        livros = {4 : [2, 7]}
+        livros = {4 : LivroBiblioteca(4, 2, 7)}
         self.unidadeBiblioteca.setLivros(livros)
         self.assertEqual(livros, self.unidadeBiblioteca.getLivros())
 
@@ -54,22 +55,22 @@ class TestUnidadeBiblioteca(unittest.TestCase):
     def testAdquirirLivroNovo(self):
         self.unidadeBiblioteca.adquirirLivro(4, 20)
         self.assertEqual(20, self.unidadeBiblioteca.getCopiasDisponiveisLivro(4))
-        self.assertEqual(0, self.unidadeBiblioteca.getCopiasAlugadasLivro(4))
+        self.assertEqual(0, self.unidadeBiblioteca.getCopiasEmprestadasLivro(4))
 
     def testAdquirirLivroExistente(self):
         self.unidadeBiblioteca.adquirirLivro(1, 20)
         self.assertEqual(23, self.unidadeBiblioteca.getCopiasDisponiveisLivro(1))
-        self.assertEqual(4, self.unidadeBiblioteca.getCopiasAlugadasLivro(1))    
+        self.assertEqual(4, self.unidadeBiblioteca.getCopiasEmprestadasLivro(1))    
 
-    def testAtualizaContagemLivroAlugado(self):
-        self.unidadeBiblioteca.atualizaContagemLivroAlugado(1)
+    def testLivroFoiEmprestado(self):
+        self.unidadeBiblioteca.livroFoiEmprestado(1)
         self.assertEqual(2, self.unidadeBiblioteca.getCopiasDisponiveisLivro(1))
-        self.assertEqual(5, self.unidadeBiblioteca.getCopiasAlugadasLivro(1))
+        self.assertEqual(5, self.unidadeBiblioteca.getCopiasEmprestadasLivro(1))
 
-    def testAtualizaContagemLivroDevolvido(self):
-        self.unidadeBiblioteca.atualizaContagemLivroDevolvido(1)
+    def testLivroFoiDevolvido(self):
+        self.unidadeBiblioteca.livroFoiDevolvido(1)
         self.assertEqual(4, self.unidadeBiblioteca.getCopiasDisponiveisLivro(1))
-        self.assertEqual(3, self.unidadeBiblioteca.getCopiasAlugadasLivro(1))
+        self.assertEqual(3, self.unidadeBiblioteca.getCopiasEmprestadasLivro(1))
 
     def testChecaLivroDisponivelNaoExiste(self):
         self.assertFalse(self.unidadeBiblioteca.checaLivroDisponivel(4))
@@ -86,3 +87,24 @@ class TestUnidadeBiblioteca(unittest.TestCase):
     def testListaLivrosDisponiveisVazio(self):
         self.unidadeBiblioteca.setLivros({})
         self.assertEqual([], self.unidadeBiblioteca.listaLivrosDisponiveis())
+
+
+    def testTransferirLivroNaoExisteUnidade(self):
+        unidade = UnidadeBiblioteca('456', 'Rua B, 2', {})
+        with self.assertRaises(Exception):
+            self.unidadeBiblioteca.transferirLivroUnidade(4, unidade, 20)
+
+    def testTransferirLivrosDemaisUnidade(self):
+        unidade = UnidadeBiblioteca('456', 'Rua B, 2', {})
+        with self.assertRaises(Exception):
+            self.unidadeBiblioteca.transferirLivroUnidade(1, unidade, 8)
+
+    def testTransferirLivrosIndisponiveisUnidade(self):
+        unidade = UnidadeBiblioteca('456', 'Rua B, 2', {})
+        with self.assertRaises(Exception):
+            self.unidadeBiblioteca.transferirLivroUnidade(1, unidade, 5)
+
+    def testTransferirLivrosDisponiveisUnidade(self):
+        unidade = UnidadeBiblioteca('456', 'Rua B, 2', {})
+        self.unidadeBiblioteca.transferirLivroUnidade(1, unidade, 2)
+        self.assertEqual(2, unidade.getCopiasDisponiveisLivro(1))

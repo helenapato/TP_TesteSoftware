@@ -1,10 +1,14 @@
+import sys
+
+sys.path.insert(0, '../src')
+from livroBiblioteca import LivroBiblioteca
+
 class UnidadeBiblioteca:
 
     def __init__(self, unidadeID, endereco, livros={}):
         self.unidadeID = unidadeID
         self.endereco = endereco
-        # Livros será um dicionário cuja chave será o ISBN do livro e o valor será uma lista
-        # a posição 0 da lista indica quantas cópias estão disponíveis e a posição 1 quantas estão alugadas
+        # Livros será um dicionário cuja chave será o ISBN do livro e o valor será um objeto livroBiblioteca
         self.livros = livros
 
     def getUnidadeID(self):
@@ -16,42 +20,40 @@ class UnidadeBiblioteca:
     def getLivros(self):
         return self.livros
 
-    def getCopiasDisponiveisLivro(self, ISBN):
-        if(self.livroExisteUnidade(ISBN)):
-            return self.livros[ISBN][0]
-        return 0
-
-    def getCopiasAlugadasLivro(self, ISBN):
-        if(self.livroExisteUnidade(ISBN)):
-            return self.livros[ISBN][1]
-        return -1
-
-    def setLivros(self, livrosNovo):
-        self.livros = livrosNovo
-
     def livroExisteUnidade(self, ISBN):
         if(ISBN in self.livros):
             return True
         return False
 
+    def getCopiasDisponiveisLivro(self, ISBN):
+        if(self.livroExisteUnidade(ISBN)):
+            return self.livros[ISBN].getCopiasDisponiveis()
+        return 0
+
+    def getCopiasEmprestadasLivro(self, ISBN):
+        if(self.livroExisteUnidade(ISBN)):
+            return self.livros[ISBN].getCopiasEmprestadas()
+        return -1
+
+    def setLivros(self, livrosNovo):
+        self.livros = livrosNovo
+
     def adquirirLivro(self, ISBN, quantidade):
         if(self.livroExisteUnidade(ISBN)):
-            self.livros[ISBN][0] += quantidade
+            self.livros[ISBN].adquirirLivros(quantidade)
         else:
-            self.livros[ISBN] = [quantidade, 0]
+            self.livros[ISBN] = LivroBiblioteca(ISBN, quantidade)
 
-    def atualizaContagemLivroAlugado(self, ISBN):
-        self.livros[ISBN][0] -= 1
-        self.livros[ISBN][1] += 1
+    def livroFoiEmprestado(self, ISBN):
+        self.livros[ISBN].livroFoiEmprestado()
 
-    def atualizaContagemLivroDevolvido(self, ISBN):
-        self.livros[ISBN][0] += 1
-        self.livros[ISBN][1] -= 1
+    def livroFoiDevolvido(self, ISBN):
+        self.livros[ISBN].livroFoiDevolvido()
 
     def checaLivroDisponivel(self, ISBN):
         if(not self.livroExisteUnidade(ISBN)):
             return False
-        if(self.livros[ISBN][0] > 0):
+        if(self.livros[ISBN].livroEstaDisponivel()):
             return True
         return False
 
@@ -63,9 +65,11 @@ class UnidadeBiblioteca:
         return livrosDisponiveis
 
 
-    def transferirLivroUnidade(self, ISBN, unidadeID, quantidade):
-        #TODO
-        print('TODO')
+    def transferirLivroUnidade(self, ISBN, unidade, quantidade):
+        if(not self.livroExisteUnidade(ISBN)):
+            raise Exception('Livro não existe nesta unidade')
+        self.livros[ISBN].doarLivros(quantidade)
+        unidade.adquirirLivro(ISBN, quantidade)
 
     def notificarUsuarioReservaDisponivel(self, ISBN, usuario):
         #TODO
