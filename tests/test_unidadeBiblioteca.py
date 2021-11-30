@@ -85,8 +85,6 @@ class TestUnidadeBiblioteca(unittest.TestCase):
     def testListaLivrosDisponiveisVazio(self):
         self.unidadeBiblioteca.setLivros({})
         self.assertEqual([], self.unidadeBiblioteca.listaLivrosDisponiveis())
-<<<<<<< HEAD
-
 
     def testTransferirLivroNaoExisteUnidade(self):
         unidade = UnidadeBiblioteca('456', 'Rua B, 2', {})
@@ -107,5 +105,4 @@ class TestUnidadeBiblioteca(unittest.TestCase):
         unidade = UnidadeBiblioteca('456', 'Rua B, 2', {})
         self.unidadeBiblioteca.transferirLivroUnidade(1, unidade, 2)
         self.assertEqual(2, unidade.getCopiasDisponiveisLivro(1))
-=======
->>>>>>> 0431a7c6e928653174ff45f9d013d2d1f74c3ad0
+
