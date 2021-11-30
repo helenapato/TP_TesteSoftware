@@ -1,8 +1,6 @@
 import unittest
-import sys
 
-sys.path.insert(0, '../src')
-from unidadeBiblioteca import UnidadeBiblioteca
+from src.unidadeBiblioteca import UnidadeBiblioteca
 
 class TestUnidadeBiblioteca(unittest.TestCase):
 
