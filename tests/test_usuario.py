@@ -1,8 +1,6 @@
 import unittest
-import sys
 
-sys.path.insert(0, '../src')
-from usuario import Usuario
+from src.usuario import Usuario
 
 TAM_MAX_NOME = 50
 
