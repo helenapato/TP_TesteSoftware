@@ -35,3 +35,6 @@ jobs:
     - name: Testes livros
       run: |
         python -m unittest tests/test_livro.py
+    - name: Testes emprestimos
+      run: |
+        python -m unittest tests/test_emprestimo.py
