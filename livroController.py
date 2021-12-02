@@ -29,7 +29,6 @@ def showLivro(id):
         return render_template('showLivro.html', livro = livro)
     return f"Livro with id ={id} Doenst exist"
 
-
 @app.route('/livros/<int:id>/update',methods = ['GET','POST'])
 def update(id):
     livro = Livro.query.filter_by(id=id).first()
@@ -50,3 +49,14 @@ def update(id):
         return render_template('updateLivro.html', livro = livro)
     return f"Livro with id = {id} Does not exist"
  
+@app.route('/livros/<int:id>/delete', methods=['GET','POST'])
+def delete(id):
+    livro = Livro.query.filter_by(id=id).first()
+    if livro:
+        if request.method == 'POST':
+            db.session.delete(livro)
+            db.session.commit()
+            return redirect('/livros')
+        return render_template('deleteLivro.html', livro = livro)
+    
+    return f"Livro with id = {id} Does not exist"
