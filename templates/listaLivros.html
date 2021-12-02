@@ -1,0 +1,4 @@
+{% for livro in livros %}
+    <h3> {{livro.id}}</h3>
+    <h3>{{livro.getISBN()}} -------- {{livro.getTitulo()}} ------ {{livro.getAutor()}}</h3><hr>
+{% endfor %}
