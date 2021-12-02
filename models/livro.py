@@ -1,12 +1,21 @@
 import re
+from flask_sqlalchemy import SQLAlchemy
 
 TAM_MAX_STR = 50
 
-class Livro:
+db =SQLAlchemy()
+ 
+class Livro(db.Model):
+
+    __tablename__ = "livro_tb"
+ 
+    id = db.Column(db.Integer, primary_key=True, unique = True)
+    ISBN = db.Column(db.Integer, unique = True)
+    titulo = db.Column(db.String(TAM_MAX_STR))
+    autor = db.Column(db.String(TAM_MAX_STR))
     
     def __init__(self, ISBN, titulo, autor):
         self.checaValidadeParametrosLivro(ISBN, titulo, autor)
-
         self.ISBN = ISBN
         self.titulo = titulo
         self.autor = autor
@@ -63,3 +72,6 @@ class Livro:
     
     def setAutor(self, autorNovo):
         self.autor = autorNovo
+
+    def setISBN(self, ISBNnovo):
+        self.ISBN = ISBNnovo
