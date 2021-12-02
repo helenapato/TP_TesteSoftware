@@ -1,6 +1,5 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: Python package
 
 # Triggers the workflow on push or pull request events
@@ -8,30 +7,33 @@ on: [push, pull_request]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v2
-      with:
-        # Semantic version range syntax or exact version of a Python version
-        python-version: '3.x'
-        # Optional - x64 or x86 architecture, defaults to x64
-        architecture: 'x64'
-    # You can test your matrix by printing the current Python version
-    - name: Display Python version
-      run: python -c "import sys; print(sys.version)"
-    - name: Testes livros Bibliotecas
-      run: |
-        python -m unittest tests/test_livroBiblioteca.py
-    - name: Testes usuarios
-      run: |
-        python -m unittest tests/test_usuario.py
-    - name: Testes unidades Bibliotecas
-      run: |
-        python -m unittest tests/test_unidadeBiblioteca.py
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Install Flask
+        run: pip install flask
+      - name: Install SQL
+        run: pip install flask_sqlalchemy
+      - name: Testes usuarios
+        run: |
+          python -m unittest tests/test_usuario.py
+      - name: Testes unidades Bibliotecas
+        run: |
+          python -m unittest tests/test_unidadeBiblioteca.py
     - name: Testes livros
       run: |
         python -m unittest tests/test_livro.py
