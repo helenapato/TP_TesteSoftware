@@ -28,3 +28,25 @@ def showLivro(id):
     if livro:
         return render_template('showLivro.html', livro = livro)
     return f"Livro with id ={id} Doenst exist"
+
+
+@app.route('/livros/<int:id>/update',methods = ['GET','POST'])
+def update(id):
+    livro = Livro.query.filter_by(id=id).first()
+    if livro:
+        if request.method == 'POST':
+        
+            isbn = request.form['isbn']
+            livro.setISBN(isbn)
+        
+            titulo = request.form['titulo']
+            livro.setTitulo(titulo)
+
+            autor = request.form['autor']
+            livro.setAutor(autor)
+
+            db.session.commit()
+            return redirect(f'/livros/{id}')
+        return render_template('updateLivro.html', livro = livro)
+    return f"Livro with id = {id} Does not exist"
+ 
