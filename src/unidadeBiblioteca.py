@@ -1,5 +1,3 @@
-import sys
-
 from src.livroBiblioteca import LivroBiblioteca
 
 class UnidadeBiblioteca:
