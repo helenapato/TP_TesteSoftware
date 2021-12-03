@@ -2,11 +2,14 @@ from src.livroBiblioteca import LivroBiblioteca
 
 class UnidadeBiblioteca:
 
-    def __init__(self, unidadeID, endereco, livros={}):
+    def __init__(self, unidadeID, endereco, livros=None):
         self.unidadeID = unidadeID
         self.endereco = endereco
-        # Livros será um dicionário cuja chave será o ISBN do livro e o valor será um objeto livroBiblioteca
-        self.livros = livros
+        # Dicionário cuja chave será o ISBN do livro e o valor será um objeto livroBiblioteca
+        if(livros is None):
+            self.livros = {}
+        else:
+            self.livros = livros
 
     def getUnidadeID(self):
         return self.unidadeID

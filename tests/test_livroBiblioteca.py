@@ -94,10 +94,7 @@ class TestLivroBiblioteca(unittest.TestCase):
         self.assertEqual(['11111111111'], livro.getListaReservas())
 
     def testUsuarioSolicitaReservaDuas(self):
-        # TODO
-        # Por algum motivo, se não especificar a lista vazia, 
-        # ele já inicializa com um elemento na lista de reservas
-        livro1 = LivroBiblioteca(2, 0, 10, [])
+        livro1 = LivroBiblioteca(2, 0, 10)
         self.assertEqual([], livro1.getListaReservas())
         livro1.usuarioSolicitaReserva('00000000000')
         self.assertEqual(['00000000000'], livro1.getListaReservas())

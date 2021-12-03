@@ -6,14 +6,18 @@ TAM_MAX_NOME = 50
 
 class Usuario:
 
-    def __init__(self, CPF, nome, email, listaEmprestimos={}):
+    def __init__(self, CPF, nome, email, listaEmprestimos=None):
 
         self.checaValidadeParametrosUsuario(CPF, nome, email)
 
         self.CPF = CPF
         self.nome = nome
         self.email = email
-        self.listaEmprestimos = listaEmprestimos
+        # Dicionario cuja chave é o ISBN do livro e os valores são objetos Emprestimo
+        if(listaEmprestimos is None):
+            self.listaEmprestimos = {}
+        else:
+            self.listaEmprestimos = listaEmprestimos
 
     def checaValidadeParametrosUsuario(self, CPF, nome, email):
         if(not self.checaValidadeCPF(CPF)):

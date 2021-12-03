@@ -1,10 +1,19 @@
 class LivroBiblioteca:
 
-    def __init__(self, ISBN, copiasDisponiveis, copiasEmprestadas=0, listaReservas=[]):
+    def __init__(self, ISBN, copiasDisponiveis, copiasEmprestadas=None, listaReservas=None):
         self.ISBN = ISBN
         self.copiasDisponiveis = copiasDisponiveis
-        self.copiasEmprestadas = copiasEmprestadas
-        self.listaReservas = listaReservas
+
+        if(copiasEmprestadas is None):
+            self.copiasEmprestadas = 0
+        else:
+            self.copiasEmprestadas = copiasEmprestadas
+        
+        # Lista dos CPFs de pessoas que reservaram o livro
+        if(listaReservas is None): 
+            self.listaReservas = []
+        else:
+            self.listaReservas = listaReservas
 
     def getISBN(self):
         return self.ISBN

@@ -109,8 +109,7 @@ class TestUsuario(unittest.TestCase):
 
     def testReservarLivroUnidadeException(self):
         usuario = Usuario('01234567890', 'joao', 'joao@exemplo.com')
-        # Lista de reservas do livro deve ser inicializada vazia para funcionar
-        unidade = UnidadeBiblioteca('456', 'Rua B, 2', {1 : LivroBiblioteca(1, 0, 4, [])})
+        unidade = UnidadeBiblioteca('456', 'Rua B, 2', {1 : LivroBiblioteca(1, 0, 4)})
         usuario.reservarLivroUnidade(1, unidade)
         with self.assertRaises(Exception):
             usuario.reservarLivroUnidade(1, unidade)
@@ -123,8 +122,7 @@ class TestUsuario(unittest.TestCase):
 
     def testEmprestarLivroUnidadeFalha(self):
         usuario = Usuario('01234567890', 'joao', 'joao@exemplo.com')
-        # Lista de reservas do livro deve ser inicializada vazia para funcionar
-        unidade = UnidadeBiblioteca('456', 'Rua B, 2', {1 : LivroBiblioteca(1, 0, 4, [])})
+        unidade = UnidadeBiblioteca('456', 'Rua B, 2', {1 : LivroBiblioteca(1, 0, 4)})
         usuario.emprestarLivroUnidade(1, unidade)
         self.assertEqual(0, len(usuario.listaEmprestimos))
         self.assertEqual('01234567890', unidade.livros[1].removeUsuarioReserva())
