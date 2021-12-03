@@ -1,14 +1,19 @@
+from datetime import date
+from src.emprestimo import Emprestimo
+from src.unidadeBiblioteca import UnidadeBiblioteca
+
 TAM_MAX_NOME = 50
 
 class Usuario:
 
-    def __init__(self, CPF, nome, email):
+    def __init__(self, CPF, nome, email, listaEmprestimos={}):
 
         self.checaValidadeParametrosUsuario(CPF, nome, email)
 
         self.CPF = CPF
         self.nome = nome
         self.email = email
+        self.listaEmprestimos = listaEmprestimos
 
     def checaValidadeParametrosUsuario(self, CPF, nome, email):
         if(not self.checaValidadeCPF(CPF)):
@@ -53,35 +58,38 @@ class Usuario:
     def getEmail(self):
         return self.email
 
+    def getListaEmprestimos(self):
+        return self.listaEmprestimos    
+
     def setNome(self, nomeNovo):
         if(self.checaValidadeNome(nomeNovo)):
             self.nome = nomeNovo
 
     def setEmail(self, emailNovo):
         if(self.checaValidadeEmail(emailNovo)):
-            self.email = emailNovo      
+            self.email = emailNovo
 
+    def setListaEmprestimos(self, emprestimosNovo):
+        self.listaEmprestimos = emprestimosNovo
+            
+               
+    def emprestarLivroUnidade(self, ISBN, unidade):
+        if(self.consultarDisponibilidadeLivroUnidade(ISBN, unidade)):
+            self.listaEmprestimos[ISBN] = Emprestimo(ISBN, self.CPF, unidade.getUnidadeID(), date.today())
+        else:
+            self.reservarLivroUnidade(ISBN, unidade)
 
-    def alugarLivroUnidade(self, ISBN, unidadeID):
-        #TODO
-        print('TODO')
+    def devolverLivroUnidade(self, ISBN, unidade):
+        unidade.usuarioDevolveLivro(ISBN)
 
-    def devolverLivroUnidade(self, ISBN, unidadeID):
-        #TODO
-        print('TODO')
+    def reservarLivroUnidade(self, ISBN, unidade):
+        unidade.usuarioReservaLivro(ISBN, self.CPF)
 
-    def reservarLivroUnidade(self, ISBN, unidadeID):
-        #TODO
-        print('TODO')
+    def verLivrosDisponiveisUnidade(self, unidade):
+        return unidade.listaLivrosDisponiveis()
 
-    def verLivrosDisponiveisUnidade(self, unidadeID):
-        #TODO
-        print('TODO')
-
-    def consultarDisponibilidadeLivroUnidade(self, ISBN, unidadeID):
-        #TODO
-        print('TODO')
+    def consultarDisponibilidadeLivroUnidade(self, ISBN, unidade):
+        return unidade.checaLivroDisponivel(ISBN)
 
     def verMeusLivrosAlugados(self):
-        #TODO
-        print('TODO')
+        return list(self.listaEmprestimos.keys())

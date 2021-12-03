@@ -58,15 +58,15 @@ class LivroBiblioteca:
             return True
         return False
 
-    def reservaUsuario(self, CPF):
+    def usuarioSolicitaReserva(self, CPF):
         if(self.existeUsuarioReserva()):
             if(CPF in self.listaReservas):
-                raise Exception('Um usuário só pode reservar um mesmo livro uma vez')
+                raise Exception('Um usuário só pode reservar uma cópia de cada livro')
         self.listaReservas.append(CPF)
 
     def removeUsuarioReserva(self):
         if(self.existeUsuarioReserva()):
             return self.listaReservas.pop(0)
-        raise Exception('Nenhum usuário reservou este livro')
+        return -1
 
     

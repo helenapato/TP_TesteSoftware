@@ -106,3 +106,21 @@ class TestUnidadeBiblioteca(unittest.TestCase):
         self.unidadeBiblioteca.transferirLivroUnidade(1, unidade, 2)
         self.assertEqual(2, unidade.getCopiasDisponiveisLivro(1))
 
+    def testUsuarioSolicitaEmprestimoDisponivel(self):
+        self.assertTrue(self.unidadeBiblioteca.usuarioSolicitaEmprestimo(1))
+        self.assertEqual(2, self.unidadeBiblioteca.getCopiasDisponiveisLivro(1))
+        self.assertEqual(5, self.unidadeBiblioteca.getCopiasEmprestadasLivro(1))
+
+    def testUsuarioSolicitaEmprestimoIndisponivel(self):
+        self.assertFalse(self.unidadeBiblioteca.usuarioSolicitaEmprestimo(2))
+        self.assertFalse(self.unidadeBiblioteca.usuarioSolicitaEmprestimo(4))      
+
+    def testUsuarioReservaLivro(self):
+        try:
+            self.unidadeBiblioteca.usuarioReservaLivro(2, '11111111111')
+        except:
+            self.fail('Usuário reservando livro correramente gerou exceção')
+
+    def testUsuarioDevolveLivro(self):
+        self.unidadeBiblioteca.usuarioDevolveLivro(2)
+        self.assertEqual(1, self.unidadeBiblioteca.getCopiasDisponiveisLivro(2))

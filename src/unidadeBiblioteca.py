@@ -68,6 +68,20 @@ class UnidadeBiblioteca:
         self.livros[ISBN].doarLivros(quantidade)
         unidade.adquirirLivro(ISBN, quantidade)
 
-    def notificarUsuarioReservaDisponivel(self, ISBN, usuario):
-        #TODO
-        print('TODO')
+    def usuarioSolicitaEmprestimo(self, ISBN):
+        if(self.checaLivroDisponivel(ISBN)):
+            self.livroFoiEmprestado(ISBN)
+            return True
+        return False
+
+    def usuarioReservaLivro(self, ISBN, CPF):
+        self.livros[ISBN].usuarioSolicitaReserva(CPF)
+
+    def usuarioDevolveLivro(self, ISBN):
+        self.livroFoiDevolvido(ISBN)
+        CPF = self.livros[ISBN].removeUsuarioReserva()
+        self.notificarUsuarioReservaDisponivel(ISBN, CPF)
+
+    def notificarUsuarioReservaDisponivel(self, ISBN, CPF):
+        # TODO
+        pass

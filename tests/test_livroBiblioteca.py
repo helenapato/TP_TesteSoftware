@@ -87,19 +87,22 @@ class TestLivroBiblioteca(unittest.TestCase):
         livro = LivroBiblioteca(1, 20)
         self.assertFalse(livro.existeUsuarioReserva())
 
-    def testReservaUsuario(self):
-        livro = LivroBiblioteca(1, 20)
-        livro.reservaUsuario('12345678900')
-        self.assertEqual(['12345678900'], livro.getListaReservas())
+    def testUsuarioSolicitaReserva(self):
+        livro = LivroBiblioteca(1, 0, 5)
+        self.assertEqual([], livro.getListaReservas())
+        livro.usuarioSolicitaReserva('11111111111')
+        self.assertEqual(['11111111111'], livro.getListaReservas())
 
-    def testReservaUsuarioDuas(self):
+    def testUsuarioSolicitaReservaDuas(self):
         # TODO
-        # Por algum motivo, neste teste apenas, se não especificar a lista vazia, 
+        # Por algum motivo, se não especificar a lista vazia, 
         # ele já inicializa com um elemento na lista de reservas
-        livro = LivroBiblioteca(1, 20, 0, [])
-        livro.reservaUsuario('12345678900')
+        livro1 = LivroBiblioteca(2, 0, 10, [])
+        self.assertEqual([], livro1.getListaReservas())
+        livro1.usuarioSolicitaReserva('00000000000')
+        self.assertEqual(['00000000000'], livro1.getListaReservas())
         with self.assertRaises(Exception):
-            livro.reservaUsuario('12345678900')
+            livro1.usuarioSolicitaReserva('00000000000')
 
     def testRemoveUsuarioReserva(self):
         livro = LivroBiblioteca(1, 20, listaReservas=['12345678900'])
@@ -107,5 +110,4 @@ class TestLivroBiblioteca(unittest.TestCase):
 
     def testRemoveUsuarioInexistenteReserva(self):
         livro = LivroBiblioteca(1, 20)
-        with self.assertRaises(Exception):
-            livro.removeUsuarioReserva('12345678900')
+        self.assertEqual(-1, livro.removeUsuarioReserva())
