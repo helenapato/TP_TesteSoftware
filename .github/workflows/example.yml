@@ -48,7 +48,3 @@ jobs:
       - name: Run coverage
         run: coverage run -m unittest discover
       - uses: codecov/codecov-action@v2
-        with:
-          files: htmlcov/index.html
-          flags: unittests
-          name: Publish coverage to Codecov
