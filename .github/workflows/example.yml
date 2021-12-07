@@ -31,7 +31,7 @@ jobs:
       - name: Testes usuarios
         run: |
           python -m unittest tests/test_usuario.py
-      - name: Testes unidades Bibliotecas
+      - name: Testes unidade Biblioteca
         run: |
           python -m unittest tests/test_unidadeBiblioteca.py
       - name: Testes livros
