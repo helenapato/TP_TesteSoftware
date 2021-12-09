@@ -28,21 +28,14 @@ jobs:
         run: pip install flask
       - name: Install SQL
         run: pip install flask_sqlalchemy
-      - name: Testes usuarios
+      - name: Testes de unidade
         run: |
           python -m unittest tests/test_usuario.py
-      - name: Testes unidade Biblioteca
-        run: |
           python -m unittest tests/test_unidadeBiblioteca.py
-      - name: Testes livros
-        run: |
           python -m unittest tests/test_livro.py
-      - name: Testes emprestimos
-        run: |
           python -m unittest tests/test_emprestimo.py
-      - name: Testes livroBiblioteca
-        run: |
           python -m unittest tests/test_livroBiblioteca.py
+          python -m unittest tests/test_reserva.py
       - name: Install Coverage.py
         run: pip install coverage
       - name: Run coverage

@@ -1,110 +1,78 @@
 import unittest
 
-from src.livroBiblioteca import LivroBiblioteca
+from models.livroBiblioteca import LivroBiblioteca
 
 class TestLivroBiblioteca(unittest.TestCase):
 
+    def setUp(self):
+        self.livroBiblioteca = LivroBiblioteca(1, 1111111111111, 20)
+
+    def testInitExceptISBN(self):
+        with self.assertRaises(Exception):
+            livro1 = LivroBiblioteca(1, 1, 20)
+
+    def testGetUnidadeID(self):
+        self.assertEqual(1, self.livroBiblioteca.getUnidadeID())
+
     def testGetISBN(self):
-        livro = LivroBiblioteca(1, 20)
-        self.assertEqual(1, livro.getISBN())
+        self.assertEqual(1111111111111, self.livroBiblioteca.getISBN())
 
     def testGetCopiasDisponiveis(self):
-        livro = LivroBiblioteca(1, 20)
-        self.assertEqual(20, livro.getCopiasDisponiveis())
+        self.assertEqual(20, self.livroBiblioteca.getCopiasDisponiveis())
 
     def testGetCopiasEmprestadas(self):
-        livro = LivroBiblioteca(1, 20, 5)
-        self.assertEqual(5, livro.getCopiasEmprestadas())
-
-    def testGetListaReservas(self):
-        livro = LivroBiblioteca(1, 20, 5, ['12345678900'])
-        self.assertEqual(['12345678900'], livro.getListaReservas())
+        self.assertEqual(0, self.livroBiblioteca.getCopiasEmprestadas())
 
     def testGetCopiasTotal(self):
-        livro = LivroBiblioteca(1, 20, 5)
-        self.assertEqual(25, livro.getCopiasTotal())
+        self.assertEqual(20, self.livroBiblioteca.getCopiasTotal())
+
+    def testSetUnidadeID(self):
+        self.livroBiblioteca.setUnidadeID(2)
+        self.assertEqual(2, self.livroBiblioteca.getUnidadeID())
+
+    def testSetISBN(self):
+        self.livroBiblioteca.setISBN(2222222222222)
+        self.assertEqual(2222222222222, self.livroBiblioteca.getISBN())
+
+    def testNotSetISBN(self):
+        self.livroBiblioteca.setISBN(2)
+        self.assertEqual(1111111111111, self.livroBiblioteca.getISBN())
 
     def testSetCopiasDisponiveis(self):
-        livro = LivroBiblioteca(1, 20)
-        livro.setCopiasDisponiveis(50)
-        self.assertEqual(50, livro.getCopiasDisponiveis())
+        self.livroBiblioteca.setCopiasDisponiveis(50)
+        self.assertEqual(50, self.livroBiblioteca.getCopiasDisponiveis())
 
     def testSetCopiasEmprestadas(self):
-        livro = LivroBiblioteca(1, 20, 5)
-        livro.setCopiasEmprestadas(30)
-        self.assertEqual(30, livro.getCopiasEmprestadas())
-
-    def testSetListaReservas(self):
-        livro = LivroBiblioteca(1, 20, 5, ['12345678900'])
-        livro.setListaReservas(['09876543210'])
-        self.assertEqual(['09876543210'], livro.getListaReservas())
+        self.livroBiblioteca.setCopiasEmprestadas(30)
+        self.assertEqual(30, self.livroBiblioteca.getCopiasEmprestadas())
 
     def testAdquirirLivros(self):
-        livro = LivroBiblioteca(1, 20)
-        livro.adquirirLivros(5)
-        self.assertEqual(25, livro.getCopiasDisponiveis())
+        self.livroBiblioteca.adquirirLivros(5)
+        self.assertEqual(25, self.livroBiblioteca.getCopiasDisponiveis())
+
+    def testDoarLivros(self):
+        self.assertTrue(self.livroBiblioteca.doarLivros(20))
+        self.assertEqual(0, self.livroBiblioteca.getCopiasDisponiveis())
 
     def testDoarLivrosDemais(self):
-        livro = LivroBiblioteca(1, 20, 5)
-        with self.assertRaises(Exception):
-            livro.doarLivros(26)
-
-    def testDoarLivrosIndisponiveis(self):
-        livro = LivroBiblioteca(1, 20, 5)
-        with self.assertRaises(Exception):
-            livro.doarLivros(25)
-
-    def testDoarLivrosCerto(self):
-        livro = LivroBiblioteca(1, 20, 5)
-        livro.doarLivros(10)
-        self.assertEqual(10, livro.getCopiasDisponiveis())
+        self.assertFalse(self.livroBiblioteca.doarLivros(21))
+        self.assertEqual(20, self.livroBiblioteca.getCopiasDisponiveis())
 
     def testLivroFoiEmprestado(self):
-        livro = LivroBiblioteca(1, 20)
-        livro.livroFoiEmprestado()
-        self.assertEqual(19, livro.getCopiasDisponiveis())
-        self.assertEqual(1, livro.getCopiasEmprestadas())
+        self.livroBiblioteca.livroFoiEmprestado()
+        self.assertEqual(19, self.livroBiblioteca.getCopiasDisponiveis())
+        self.assertEqual(1, self.livroBiblioteca.getCopiasEmprestadas())
+
+    def testLivroNaoFoiEmprestado(self):
+        self.livroBiblioteca.setCopiasDisponiveis(0)
+        self.assertFalse(self.livroBiblioteca.livroFoiEmprestado())
+        self.assertEqual(0, self.livroBiblioteca.getCopiasDisponiveis())
+
+    def testLivroNaoFoiDevolvido(self):
+        self.assertFalse(self.livroBiblioteca.livroFoiDevolvido())
+        self.assertEqual(0, self.livroBiblioteca.getCopiasEmprestadas())
 
     def testLivroFoiDevolvido(self):
-        livro = LivroBiblioteca(1, 20, 5)
-        livro.livroFoiDevolvido()
-        self.assertEqual(21, livro.getCopiasDisponiveis())
-        self.assertEqual(4, livro.getCopiasEmprestadas())
-
-    def testLivroEstaDisponivel(self):
-        livro = LivroBiblioteca(1, 20, 5)
-        self.assertTrue(livro.livroEstaDisponivel())
-
-    def testLivroEstaIndisponivel(self):
-        livro = LivroBiblioteca(1, 0, 5)
-        self.assertFalse(livro.livroEstaDisponivel())
-
-    def testExisteUsuarioReserva(self):
-        livro = LivroBiblioteca(1, 20, listaReservas=['12345678900'])
-        self.assertTrue(livro.existeUsuarioReserva())
-
-    def testNaoExisteUsuarioReserva(self):
-        livro = LivroBiblioteca(1, 20)
-        self.assertFalse(livro.existeUsuarioReserva())
-
-    def testUsuarioSolicitaReserva(self):
-        livro = LivroBiblioteca(1, 0, 5)
-        self.assertEqual([], livro.getListaReservas())
-        livro.usuarioSolicitaReserva('11111111111')
-        self.assertEqual(['11111111111'], livro.getListaReservas())
-
-    def testUsuarioSolicitaReservaDuas(self):
-        livro1 = LivroBiblioteca(2, 0, 10)
-        self.assertEqual([], livro1.getListaReservas())
-        livro1.usuarioSolicitaReserva('00000000000')
-        self.assertEqual(['00000000000'], livro1.getListaReservas())
-        with self.assertRaises(Exception):
-            livro1.usuarioSolicitaReserva('00000000000')
-
-    def testRemoveUsuarioReserva(self):
-        livro = LivroBiblioteca(1, 20, listaReservas=['12345678900'])
-        self.assertEqual('12345678900', livro.removeUsuarioReserva())
-
-    def testRemoveUsuarioInexistenteReserva(self):
-        livro = LivroBiblioteca(1, 20)
-        self.assertEqual(-1, livro.removeUsuarioReserva())
+        self.livroBiblioteca.setCopiasEmprestadas(1)
+        self.assertTrue(self.livroBiblioteca.livroFoiDevolvido())
+        self.assertEqual(21, self.livroBiblioteca.getCopiasDisponiveis())
