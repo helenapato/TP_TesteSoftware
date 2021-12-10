@@ -2,6 +2,7 @@ from flask import Flask
 from models.livro import db
 from models.reserva import db_reserva
 from models.usuario import db_usuario
+from models.emprestimo import db_emprestimo
 from models.livroBiblioteca import db_livroBiblioteca
 from models.unidadeBiblioteca import db_unidadeBiblioteca
 
@@ -17,11 +18,14 @@ def create_table():
     db.create_all()
     db_reserva.create_all()
     db_usuario.create_all()
+    db_emprestimo.create_all()
     db_livroBiblioteca.create_all()
     db_unidadeBiblioteca.create_all()
+
 
 import livroController
 import usuarioController
 import reservaController
+import emprestimoController
 import livroBibliotecaController
 import unidadeBibliotecaController

@@ -1,5 +1,5 @@
 import unittest
-from src.emprestimo import Emprestimo
+from models.emprestimo import Emprestimo
 from datetime import date, timedelta
 
 PERIODO_EMPRESTIMO = 15

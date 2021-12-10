@@ -1,0 +1,3 @@
+{% for emprestimo in emprestimos %}
+    <h3>{{emprestimo.getISBN()}} -------- {{emprestimo.getCPF()}} ------ {{emprestimo.getUnidadeID()}} ------ {{emprestimo.getDataAluguel().strftime("%d/%m/%Y")}} ------ {{emprestimo.getDataDevolucaoPrevista().strftime("%d/%m/%Y")}}</h3><hr>
+{% endfor %}
