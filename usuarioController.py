@@ -40,20 +40,21 @@ def setNovosParametrosUsuario(CPF, novoCPF=None, novoNome=None, novoEmail=None):
 def emprestarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
     if not usuario:
-        return -1
+        return 1
     biblioteca = unidadeBibliotecaController.UnidadeBiblioteca.query.filter_by(unidadeID=unidadeID).first()
     if not biblioteca:
-        return -1
+        return 2
     livro = livroBibliotecaController.LivroBiblioteca.query.filter_by(unidadeID=unidadeID, ISBN=ISBN)
     if not livro:
-        return -1
+        return 3
     
     retVal = livroBibliotecaController.livroFoiEmprestado(unidadeID, ISBN)
     if(retVal == 1):
-        return 'não há cópias disponíveis'
+        return 4
     if(retVal == 2):
-        return 'essa unidade não tem esse livro'
+        return 5
     emprestimoController.criarEmprestimo(ISBN, CPF, unidadeID, datetime.now())
+    return 0
 
 def devolverLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
@@ -97,3 +98,27 @@ def cadastrarUsuario():
         email = request.form['email']
         criarUsuario(CPF, nome, email)
         return redirect('/usuarios/')
+
+@app.route('/usuarios/emprestar/', methods=['GET', 'POST'])
+def fazerEmprestimo():
+    if request.method == 'GET':
+        return render_template('fazerEmprestimo.html')
+    
+    if request.method == 'POST':
+        CPF = request.form['CPF']
+        unidadeID = request.form['unidadeID']
+        ISBN = request.form['ISBN']
+        resultadoEmprestimo = emprestarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN)
+
+        if resultadoEmprestimo == 1:
+            return 'Não foi possível encontrar um usuário com este CPF'
+        elif resultadoEmprestimo == 2:
+            return 'Não foi possível encontrar esta biblioteca'
+        elif resultadoEmprestimo == 3:
+            return 'Não foi possível encontrar este livro'
+        elif resultadoEmprestimo == 4:
+            return 'Não há cópias deste livro disponíveis nesta biblioteca'
+        elif resultadoEmprestimo == 5:
+            return 'Não foi possível encontrar este livro nesta biblioteca'
+
+        return redirect('/emprestimos/')
