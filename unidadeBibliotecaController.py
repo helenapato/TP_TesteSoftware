@@ -1,3 +1,5 @@
+from flask import render_template, request, redirect
+from app import app
 import livroBibliotecaController
 from models.unidadeBiblioteca import db_unidadeBiblioteca, UnidadeBiblioteca
 
@@ -50,3 +52,29 @@ def comprarLivrosUnidade(unidadeID, ISBN, quantidade):
     if not biblioteca:
         return -1
     livroBibliotecaController.adquirirLivros(unidadeID, ISBN, quantidade)
+
+@app.route('/unidades/')
+def listarUnidadesBiblioteca():
+    unidades = UnidadeBiblioteca.query.all()
+    return render_template('listarUnidadesBiblioteca.html', unidades=unidades)
+
+@app.route('/unidades/criar/' , methods = ['GET','POST'])
+def criarUnidadeBibliotecaManual():
+    if request.method == 'GET':
+        return render_template('criarUnidadeBiblioteca.html')
+ 
+    if request.method == 'POST':
+        unidadeID = request.form['unidadeID']
+        endereco = request.form['endereco']
+        criarUnidadeBiblioteca(unidadeID, endereco)
+        return redirect('/unidades/')
+
+@app.route('/unidades/deletar/' , methods = ['GET','POST'])
+def deletarUnidadeBibliotecaManual():
+    if request.method == 'GET':
+        return render_template('deletarUnidadeBiblioteca.html')
+ 
+    if request.method == 'POST':
+        unidadeID = request.form['unidadeID']
+        deletarUnidadeBiblioteca(unidadeID)
+        return redirect('/unidades/')
