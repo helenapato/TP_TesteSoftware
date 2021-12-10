@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from models.livro import db
 from models.reserva import db_reserva
 from models.usuario import db_usuario
@@ -21,6 +21,10 @@ def create_table():
     db_emprestimo.create_all()
     db_livroBiblioteca.create_all()
     db_unidadeBiblioteca.create_all()
+
+@app.route('/')
+def home():
+    return render_template('home.html')
 
 
 import livroController

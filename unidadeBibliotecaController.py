@@ -89,6 +89,7 @@ def listarLivrosBiblioteca(unidadeID):
         if livros:
             lista_livros = {}
             for livro in livros:
+                # Buscar as demais informações do livro na classe livro
                 newLivro = livroController.Livro.query.filter_by(ISBN=livro.getISBN()).first()
                 if newLivro:
                     lista_livros[livro.getISBN()] = [newLivro.getTitulo(), newLivro.getAutor()]
