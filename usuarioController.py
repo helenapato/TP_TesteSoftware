@@ -2,7 +2,7 @@ from models.usuario import db_usuario, Usuario
 import unidadeBibliotecaController
 import livroBibliotecaController
 import reservaController
-import emprestimoController
+#import emprestimoController
 
 from datetime import date
 
@@ -34,7 +34,7 @@ def setNovosParametrosUsuario(CPF, novoCPF=None, novoNome=None, novoEmail=None):
         db_usuario.session.commit()       
     else:
         return -1
-
+'''
 def emprestarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
     if not usuario:
@@ -69,7 +69,7 @@ def devolverLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     
     livroBibliotecaController.livroFoiDevolvido(unidadeID, ISBN)
     emprestimoController.deletarEmprestimo(CPF, unidadeID, ISBN)
-
+'''
 def reservarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
     if not usuario:
