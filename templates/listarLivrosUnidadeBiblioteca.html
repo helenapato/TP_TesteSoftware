@@ -1,0 +1,9 @@
+{% for livro in livros %}
+    <h3> ISBN: {{livro.getISBN()}}</h3>
+    {% if livro.getISBN() in lista_livros %}
+        <p>Título: {{lista_livros[livro.getISBN()][0]}}</p>
+        <p>Autor: {{lista_livros[livro.getISBN()][1]}}</p>
+    {% endif %}
+    <p> Cópias disponíveis: {{livro.getCopiasDisponiveis()}}</p>
+    <p> Cópias emprestadas: {{livro.getCopiasEmprestadas()}}</p>
+{% endfor %}

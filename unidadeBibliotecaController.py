@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect
 from app import app
 import livroBibliotecaController
+import livroController
 from models.unidadeBiblioteca import db_unidadeBiblioteca, UnidadeBiblioteca
 
 # TODO Criar interface para todos
@@ -69,12 +70,41 @@ def criarUnidadeBibliotecaManual():
         criarUnidadeBiblioteca(unidadeID, endereco)
         return redirect('/unidades/')
 
-@app.route('/unidades/deletar/' , methods = ['GET','POST'])
-def deletarUnidadeBibliotecaManual():
+@app.route('/unidades/<int:unidadeID>/deletar/' , methods = ['GET','POST'])
+def deletarUnidadeBibliotecaManual(unidadeID):
+    biblioteca = UnidadeBiblioteca.query.filter_by(unidadeID=unidadeID).first()
+    if biblioteca:
+        if request.method == 'GET':
+            return render_template('deletarUnidadeBiblioteca.html', biblioteca=biblioteca)
+    
+        if request.method == 'POST':
+            deletarUnidadeBiblioteca(unidadeID)
+            return redirect('/unidades/')
+
+@app.route('/unidades/<int:unidadeID>/livros/')
+def listarLivrosBiblioteca(unidadeID):
+    biblioteca = UnidadeBiblioteca.query.filter_by(unidadeID=unidadeID).first()
+    if biblioteca:
+        livros = livroBibliotecaController.LivroBiblioteca.query.filter_by(unidadeID=unidadeID)
+        if livros:
+            lista_livros = {}
+            for livro in livros:
+                newLivro = livroController.Livro.query.filter_by(ISBN=livro.getISBN()).first()
+                if newLivro:
+                    lista_livros[livro.getISBN()] = [newLivro.getTitulo(), newLivro.getAutor()]
+            return render_template('listarLivrosUnidadeBiblioteca.html', livros=livros, lista_livros=lista_livros)
+
+@app.route('/unidades/<int:unidadeID>/livros/criar/' , methods = ['GET','POST'])
+def criarLivroUnidadeBibliotecaManual(unidadeID):
     if request.method == 'GET':
-        return render_template('deletarUnidadeBiblioteca.html')
+        return render_template('criarLivroUnidadeBiblioteca.html')
  
     if request.method == 'POST':
-        unidadeID = request.form['unidadeID']
-        deletarUnidadeBiblioteca(unidadeID)
-        return redirect('/unidades/')
+        ISBN = request.form['ISBN']
+        copiasDisponiveis = request.form['copiasDisponiveis']
+        copiasEmprestadas = request.form['copiasEmprestadas']
+        if copiasEmprestadas:
+            livroBibliotecaController.criarLivroBiblioteca(unidadeID, ISBN, copiasDisponiveis, copiasEmprestadas)
+        else:
+            livroBibliotecaController.criarLivroBiblioteca(unidadeID, ISBN, copiasDisponiveis)
+        return redirect(f'/unidades/{unidadeID}/livros/')

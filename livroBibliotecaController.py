@@ -1,4 +1,5 @@
 from models.livroBiblioteca import db_livroBiblioteca, LivroBiblioteca
+import livroController
 import reservaController
 
 def criarLivroBiblioteca(unidadeID, ISBN, copiasDisponiveis, copiasEmprestadas=None):
