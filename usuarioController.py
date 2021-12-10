@@ -1,10 +1,12 @@
+from flask import render_template, request, redirect
+from app import app
 from models.usuario import db_usuario, Usuario
 import unidadeBibliotecaController
 import livroBibliotecaController
 import reservaController
-#import emprestimoController
+import emprestimoController
 
-from datetime import date
+from datetime import datetime
 
 # TODO Criar interface para todos
 
@@ -51,7 +53,7 @@ def emprestarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
         return 'não há cópias disponíveis'
     if(retVal == 2):
         return 'essa unidade não tem esse livro'
-    #emprestimoController.criarEmprestimo(CPF, unidadeID, ISBN, date.today())
+    emprestimoController.criarEmprestimo(ISBN, CPF, unidadeID, datetime.now())
 
 def devolverLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
@@ -63,12 +65,9 @@ def devolverLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     livro = livroBibliotecaController.LivroBiblioteca.query.filter_by(unidadeID=unidadeID, ISBN=ISBN)
     if not livro:
         return -1
-    #emprestimo = emprestimoController.Emprestimo.query.filter_by(CPF=CPF, unidadeID=unidadeID, ISBN=ISBN)
-    #if not emprestimo:
-    #    return -1
     
     livroBibliotecaController.livroFoiDevolvido(unidadeID, ISBN)
-    #emprestimoController.deletarEmprestimo(CPF, unidadeID, ISBN)
+    emprestimoController.deletarEmprestimo(ISBN, CPF, unidadeID)
 
 def reservarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
@@ -81,3 +80,20 @@ def reservarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     if not livro:
         return -1
     reservaController.criarReserva(unidadeID, ISBN, CPF)
+
+@app.route('/usuarios/')
+def listarUsuarios():
+    usuarios = Usuario.query.all()
+    return render_template('listarUsuarios.html', usuarios=usuarios)
+
+@app.route('/usuarios/cadastrar/', methods=['GET', 'POST'])
+def cadastrarUsuario():
+    if request.method == 'GET':
+        return render_template('cadastrarUsuario.html')
+    
+    if request.method == 'POST':
+        CPF = request.form['CPF']
+        nome = request.form['nome']
+        email = request.form['email']
+        criarUsuario(CPF, nome, email)
+        return redirect('/usuarios/')
