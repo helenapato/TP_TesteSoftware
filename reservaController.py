@@ -1,4 +1,3 @@
-from re import A
 from models.reserva import db_reserva, Reserva
 
 def criarReserva(unidadeID, ISBN, CPF):

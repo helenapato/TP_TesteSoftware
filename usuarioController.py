@@ -34,7 +34,7 @@ def setNovosParametrosUsuario(CPF, novoCPF=None, novoNome=None, novoEmail=None):
         db_usuario.session.commit()       
     else:
         return -1
-'''
+
 def emprestarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
     if not usuario:
@@ -51,7 +51,7 @@ def emprestarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
         return 'não há cópias disponíveis'
     if(retVal == 2):
         return 'essa unidade não tem esse livro'
-    emprestimoController.criarEmprestimo(CPF, unidadeID, ISBN, date.today())
+    #emprestimoController.criarEmprestimo(CPF, unidadeID, ISBN, date.today())
 
 def devolverLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
@@ -63,13 +63,13 @@ def devolverLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     livro = livroBibliotecaController.LivroBiblioteca.query.filter_by(unidadeID=unidadeID, ISBN=ISBN)
     if not livro:
         return -1
-    emprestimo = emprestimoController.Emprestimo.query.filter_by(CPF=CPF, unidadeID=unidadeID, ISBN=ISBN)
-    if not emprestimo:
-        return -1
+    #emprestimo = emprestimoController.Emprestimo.query.filter_by(CPF=CPF, unidadeID=unidadeID, ISBN=ISBN)
+    #if not emprestimo:
+    #    return -1
     
     livroBibliotecaController.livroFoiDevolvido(unidadeID, ISBN)
-    emprestimoController.deletarEmprestimo(CPF, unidadeID, ISBN)
-'''
+    #emprestimoController.deletarEmprestimo(CPF, unidadeID, ISBN)
+
 def reservarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
     if not usuario:
