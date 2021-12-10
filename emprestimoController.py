@@ -2,7 +2,6 @@ from flask import render_template, request, redirect
 from app import app
 from models.emprestimo import db_emprestimo, Emprestimo
 from datetime import datetime
-# import time
 
 def criarEmprestimo(ISBN, CPF, unidadeID, dataAluguel):
     emprestimo = Emprestimo(ISBN, CPF, unidadeID, dataAluguel)
@@ -34,7 +33,7 @@ def calcularMulta(ISBN, CPF, unidadeID, dataCalculo):
 @app.route('/emprestimos/')
 def listEmprestimos():
     emprestimos = Emprestimo.query.all()
-    print(emprestimos)
+    # print(emprestimos)
     return render_template('listaEmprestimos.html', emprestimos=emprestimos)
 
 @app.route('/emprestimos/create/', methods=['GET', 'POST'])
