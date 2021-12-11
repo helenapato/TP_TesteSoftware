@@ -9,7 +9,7 @@ def criarEmprestimo(ISBN, CPF, unidadeID, dataAluguel):
     db_emprestimo.session.commit()
 
 def deletarEmprestimo(ISBN, CPF, unidadeID):
-    emprestimo = Emprestimo.query.filter(ISBN=ISBN, CPF=CPF, unidadeID=unidadeID).first()
+    emprestimo = Emprestimo.query.filter_by(ISBN=ISBN, CPF=CPF, unidadeID=unidadeID).first()
     if emprestimo:
         db_emprestimo.session.delete(emprestimo)
         db_emprestimo.session.commit()
@@ -17,14 +17,14 @@ def deletarEmprestimo(ISBN, CPF, unidadeID):
         return -1
 
 def setDataDevolucaoReal(ISBN, CPF, unidadeID, dataDevolucaoReal):
-    emprestimo = Emprestimo.query.filter(ISBN=ISBN, CPF=CPF, unidadeID=unidadeID).first()
+    emprestimo = Emprestimo.query.filter_by(ISBN=ISBN, CPF=CPF, unidadeID=unidadeID).first()
     if emprestimo:
         emprestimo.setDataDevolucaoReal(dataDevolucaoReal)
     else:
         return -1
 
 def calcularMulta(ISBN, CPF, unidadeID, dataCalculo):
-    emprestimo = Emprestimo.query.filter(ISBN=ISBN, CPF=CPF, unidadeID=unidadeID).first()
+    emprestimo = Emprestimo.query.filter_by(ISBN=ISBN, CPF=CPF, unidadeID=unidadeID).first()
     if emprestimo:
         return emprestimo.calcularMulta(dataCalculo)
     else:
