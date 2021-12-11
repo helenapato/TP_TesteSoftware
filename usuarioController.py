@@ -73,13 +73,13 @@ def devolverLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
 def reservarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN):
     usuario = Usuario.query.filter_by(CPF=CPF).first()
     if not usuario:
-        return -1
+        return 1
     biblioteca = unidadeBibliotecaController.UnidadeBiblioteca.query.filter_by(unidadeID=unidadeID).first()
     if not biblioteca:
-        return -1
+        return 2
     livro = livroBibliotecaController.LivroBiblioteca.query.filter_by(unidadeID=unidadeID, ISBN=ISBN)
     if not livro:
-        return -1
+        return 3
     reservaController.criarReserva(unidadeID, ISBN, CPF)
 
 @app.route('/usuarios/')
@@ -120,5 +120,23 @@ def fazerEmprestimo():
             return 'Não há cópias deste livro disponíveis nesta biblioteca'
         elif resultadoEmprestimo == 5:
             return 'Não foi possível encontrar este livro nesta biblioteca'
-
         return redirect('/emprestimos/')
+
+@app.route('/usuarios/reservar/', methods=['GET', 'POST'])
+def fazerReserva():
+    if request.method == 'GET':
+        return render_template('fazerReserva.html')
+    
+    if request.method == 'POST':
+        CPF = request.form['CPF']
+        unidadeID = request.form['unidadeID']
+        ISBN = request.form['ISBN']
+    
+    resultadoReserva = reservarLivroUnidadeBiblioteca(CPF, unidadeID, ISBN)
+    if resultadoReserva == 1:
+        return 'Não foi possível encontrar um usuário com este CPF'
+    elif resultadoReserva == 2:
+        return 'Não foi possível encontrar esta biblioteca'
+    elif resultadoReserva == 3:
+        return 'Não foi possível encontrar este livro'
+    return redirect('/livros/')
