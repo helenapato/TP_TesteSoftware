@@ -3,16 +3,15 @@ from flask_sqlalchemy import SQLAlchemy
 
 TAM_MAX_STR = 50
 
-db =SQLAlchemy()
+db_livro = SQLAlchemy()
  
-class Livro(db.Model):
+class Livro(db_livro.Model):
 
     __tablename__ = "livro_tb"
  
-    id = db.Column(db.Integer, primary_key=True, unique = True)
-    ISBN = db.Column(db.Integer, unique = True)
-    titulo = db.Column(db.String(TAM_MAX_STR))
-    autor = db.Column(db.String(TAM_MAX_STR))
+    ISBN = db_livro.Column(db_livro.Integer, primary_key=True)
+    titulo = db_livro.Column(db_livro.String(TAM_MAX_STR))
+    autor = db_livro.Column(db_livro.String(TAM_MAX_STR))
     
     def __init__(self, ISBN, titulo, autor):
         self.checaValidadeParametrosLivro(ISBN, titulo, autor)
@@ -66,12 +65,15 @@ class Livro(db.Model):
     
     def getAutor(self):
         return self.autor
-    
-    def setTitulo(self, tituloNovo):
-        self.titulo = tituloNovo
-    
-    def setAutor(self, autorNovo):
-        self.autor = autorNovo
 
     def setISBN(self, ISBNnovo):
-        self.ISBN = ISBNnovo
+        if(self.checaValidadeISBN(ISBNnovo)):
+            self.ISBN = ISBNnovo
+    
+    def setTitulo(self, tituloNovo):
+        if(self.checaValidadeTitulo(tituloNovo)):
+            self.titulo = tituloNovo
+    
+    def setAutor(self, autorNovo):
+        if(self.checaValidadeAutor(autorNovo)):
+            self.autor = autorNovo
