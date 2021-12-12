@@ -38,7 +38,7 @@ jobs:
           python -m unittest tests/test_reserva.py
       - name: Testes de integracao
         run: |
-          python -m unittest tests/test_livroBD.py
+          python -m unittest tests/test_livroController.py
           python -m unittest tests/test_reservaController.py
           python -m unittest tests/test_livroBibliotecaController.py
       - name: Install Coverage.py
