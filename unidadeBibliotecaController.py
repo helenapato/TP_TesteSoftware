@@ -34,18 +34,17 @@ def setNovosParametrosBiblioteca(unidadeID, novoUnidadeID=None, novoEndereco=Non
 def transferirLivroUnidade(unidadeID_de, unidadeID_para, ISBN, quantidade):
     biblioteca_de = UnidadeBiblioteca.query.filter_by(unidadeID=unidadeID_de).first()
     if not biblioteca_de:
-        return -1
+        return 1 # Biblioteca de origem não existe
     biblioteca_para = UnidadeBiblioteca.query.filter_by(unidadeID=unidadeID_para).first()
     if not biblioteca_para:
-        return -1
+        return 2 # Biblioteca de destino não existe
     livro = livroBibliotecaController.LivroBiblioteca.query.filter_by(unidadeID=unidadeID_de, ISBN=ISBN)
     if not livro:
-        return -1
+        return 3 # Livro não existe na biblioteca de origem
     
     retVal = livroBibliotecaController.doarLivros(unidadeID_de, ISBN, quantidade)
     if(retVal == 1):
-        return 'livros insuficientes para transferir'
-    livroBibliotecaController.setNovosParametrosLivroBiblioteca(unidadeID_de, ISBN, novoUnidadeID=unidadeID_para)
+        return 4 # Livros insuficientes para transferir
     livroBibliotecaController.adquirirLivros(unidadeID_para, ISBN, quantidade)
 
 def comprarLivrosUnidade(unidadeID, ISBN, quantidade):
