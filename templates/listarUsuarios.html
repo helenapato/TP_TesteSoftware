@@ -1,3 +1,12 @@
+<p><a href='/'>Home</a></p>
+
 {% for usuario in usuarios %}
-    <h3>{{usuario.getNome()}} -------- {{usuario.getEmail()}} ------ {{usuario.getCPF()}}</h3><hr>
+    <h3>CPF: {{usuario.getCPF()}}</h3>
+    <p>Nome: {{usuario.getNome()}}</p>
+    <p>E-mail: {{usuario.getEmail()}}</p><hr>
 {% endfor %}
+<h3>Opções</h3>
+<p><a href='/usuarios/cadastrar/'>Cadastrar novo</a></p>
+<p><a href='/usuarios/emprestar/'>Empréstimo</a></p>
+<p><a href='/usuarios/reservar/'>Reserva</a></p>
+<p><a href='/usuarios/devolver/'>Devolução</a></p>

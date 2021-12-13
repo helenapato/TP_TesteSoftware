@@ -1,10 +1,11 @@
+<p><a href='/'>Home</a></p>
+
 {% for unidade in unidades %}
     <h3> Unidade {{unidade.getUnidadeID()}}</h3>
     <p> Endereco: {{unidade.getEndereco()}}</p>
-    <a href='/unidades/{{unidade.getUnidadeID()}}/livros/'>Livros</a>
-    <p></p>
-    <a href='/unidades/{{unidade.getUnidadeID()}}/deletar/'>Deletar</a>
+    <p><a href='/unidades/{{unidade.getUnidadeID()}}/livros/'>Livros</a></p>
+    <p><a href='/unidades/{{unidade.getUnidadeID()}}/deletar/'>Deletar</a><hr></p>
+    
 {% endfor %}
 <h3>Opções</h3>
-<p></p>
-<a href='/unidades/criar/'>Criar nova</a>
+<p><a href='/unidades/criar/'>Criar nova</a></p>

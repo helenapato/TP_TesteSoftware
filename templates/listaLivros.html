@@ -1,4 +1,9 @@
+<p><a href='/'>Home</a></p>
+
 {% for livro in livros %}
     <h3> {{livro.getISBN()}}</h3>
-    <h3>{{livro.getTitulo()}} ------ {{livro.getAutor()}}</h3><hr>
+    <h3>{{livro.getTitulo()}} ------ {{livro.getAutor()}}</h3>
+    <a href='/livros/{{livro.getISBN()}}/'>Detalhes</a><hr>
 {% endfor %}
+<h3>Opções</h3>
+<a href='/livros/create/'>Criar novo</a>

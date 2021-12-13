@@ -92,7 +92,7 @@ def listarLivrosBiblioteca(unidadeID):
                 newLivro = livroController.Livro.query.filter_by(ISBN=livro.getISBN()).first()
                 if newLivro:
                     lista_livros[livro.getISBN()] = [newLivro.getTitulo(), newLivro.getAutor()]
-            return render_template('listarLivrosUnidadeBiblioteca.html', livros=livros, lista_livros=lista_livros)
+            return render_template('listarLivrosUnidadeBiblioteca.html', livros=livros, lista_livros=lista_livros, unidadeID=unidadeID)
 
 @app.route('/unidades/<int:unidadeID>/livros/criar/' , methods = ['GET','POST'])
 def criarLivroUnidadeBibliotecaManual(unidadeID):

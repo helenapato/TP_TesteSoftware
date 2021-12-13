@@ -1,3 +1,9 @@
+<p><a href='/'>Home</a></p>
+
 {% for emprestimo in emprestimos %}
-    <h3>{{emprestimo.getISBN()}} -------- {{emprestimo.getCPF()}} ------ {{emprestimo.getUnidadeID()}} ------ {{emprestimo.getDataAluguel().strftime("%d/%m/%Y")}} ------ {{emprestimo.getDataDevolucaoPrevista().strftime("%d/%m/%Y")}}</h3><hr>
+    <p>ISBN do livro: {{emprestimo.getISBN()}}</p>
+    <p>CPF do usuário: {{emprestimo.getCPF()}}</p>
+    <p>ID da unidade: {{emprestimo.getUnidadeID()}}</p>
+    <p>Data de empréstimo: {{emprestimo.getDataAluguel().strftime("%d/%m/%Y")}} </p>
+    <p>Data para devolução: {{emprestimo.getDataDevolucaoPrevista().strftime("%d/%m/%Y")}}</p><hr>
 {% endfor %}
