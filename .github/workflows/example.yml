@@ -42,6 +42,7 @@ jobs:
           python -m unittest tests/integracao/test_reservaController.py
           python -m unittest tests/integracao/test_livroBibliotecaController.py
           python -m unittest tests/integracao/test_unidadeBibliotecaController.py
+          python -m unittest tests/integracao/test_usuarioController.py
       - name: Install Coverage.py
         run: pip install coverage
       - name: Run coverage

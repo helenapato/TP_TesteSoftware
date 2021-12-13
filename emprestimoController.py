@@ -33,7 +33,6 @@ def calcularMulta(ISBN, CPF, unidadeID, dataCalculo):
 @app.route('/emprestimos/')
 def listEmprestimos():
     emprestimos = Emprestimo.query.all()
-    # print(emprestimos)
     return render_template('listaEmprestimos.html', emprestimos=emprestimos)
 
 @app.route('/emprestimos/create/', methods=['GET', 'POST'])
@@ -45,9 +44,6 @@ def criarEmprestimoManual():
         ISBN = request.form['ISBN']
         CPF = request.form['CPF']
         unidadeID = request.form['unidadeID']
-        # dataAluguel = request.form['dataAluguel']
         dataAluguel = datetime.now()
-        emprestimo = Emprestimo(ISBN, CPF, unidadeID, dataAluguel)
-        db_emprestimo.session.add(emprestimo)
-        db_emprestimo.session.commit()
+        criarEmprestimo(ISBN, CPF, unidadeID, dataAluguel)
     return redirect('/emprestimos/')

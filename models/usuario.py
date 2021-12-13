@@ -32,7 +32,7 @@ class Usuario(db_usuario.Model):
 
     def checaValidadeCPF(self, CPF):
         # CPF só pode conter dígitos de 0 a 9
-        if(not CPF.isdecimal()):
+        if(not str(CPF).isdecimal()):
             return False
         # Tamanho do CPF deve ser de exatamente 11 dígitos
         if(len(str(CPF)) != 11):
