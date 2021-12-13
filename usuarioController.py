@@ -99,6 +99,17 @@ def cadastrarUsuario():
         criarUsuario(CPF, nome, email)
         return redirect('/usuarios/')
 
+@app.route('/usuarios/deletar/<int:CPF>/', methods=['GET', 'POST'])
+def deletarUsuarioManual(CPF):
+    usuario = Usuario.query.filter_by(CPF=CPF).first()
+    if usuario:
+        if request.method == 'GET':
+            return render_template('deletarUsuario.html', usuario=usuario)
+        
+        if request.method == 'POST':
+            deletarUsuario(CPF)
+            return redirect('/usuarios/')
+
 @app.route('/usuarios/emprestar/', methods=['GET', 'POST'])
 def fazerEmprestimo():
     if request.method == 'GET':

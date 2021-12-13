@@ -3,7 +3,8 @@
 {% for usuario in usuarios %}
     <h3>CPF: {{usuario.getCPF()}}</h3>
     <p>Nome: {{usuario.getNome()}}</p>
-    <p>E-mail: {{usuario.getEmail()}}</p><hr>
+    <p>E-mail: {{usuario.getEmail()}}</p>
+    <p><a href='/usuarios/deletar/{{usuario.getCPF()}}/'>Deletar</a></p><hr>
 {% endfor %}
 <h3>Opções</h3>
 <p><a href='/usuarios/cadastrar/'>Cadastrar novo</a></p>
