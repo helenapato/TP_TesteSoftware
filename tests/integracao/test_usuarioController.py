@@ -1,12 +1,14 @@
-from models.unidadeBiblioteca import db_unidadeBiblioteca, UnidadeBiblioteca
+from models.unidadeBiblioteca import db_unidadeBiblioteca
 from models.livroBiblioteca import db_livroBiblioteca, LivroBiblioteca
 from models.emprestimo import db_emprestimo, Emprestimo
 from models.reserva import db_reserva, Reserva
+
 import emprestimoController
 import livroBibliotecaController
 import unidadeBibliotecaController
 import usuarioController
 import reservaController
+
 from models.usuario import db_usuario, Usuario
 from app import app
 import unittest

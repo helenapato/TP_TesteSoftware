@@ -10,10 +10,6 @@ class TestEmprestimo(unittest.TestCase):
     def setUp(self):
         self.today = date.today()
         self.emprestimo = Emprestimo('1234567891011', '12345678900', '1', self.today)
-    
-    def tearDown(self):
-        #TODO
-        pass
 
     def testSetDataDevolucaoRealInvalida(self):
         dataDevolucao = self.today - timedelta(days=1)
